@@ -36,6 +36,17 @@ html { scroll-behavior: smooth; }
   to { opacity: 1; }
 }
 
+@keyframes blobFloat {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -20px) scale(1.08); }
+  66% { transform: translate(-20px, 15px) scale(0.94); }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -102,6 +113,18 @@ a:hover { color: var(--accent-dark); text-decoration: underline; }
   transform: translateY(-2px);
 }
 
+/* Scroll progress bar */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 0%;
+  background: var(--accent);
+  z-index: 200;
+  transition: width 0.1s ease-out;
+}
+
 .nav-links a {
   position: relative;
   color: var(--text-muted);
@@ -145,12 +168,39 @@ a:hover { color: var(--accent-dark); text-decoration: underline; }
 
 /* Hero */
 .hero {
+  position: relative;
   padding: 96px 24px 72px;
   text-align: center;
   background: linear-gradient(180deg, var(--bg-alt), var(--bg));
+  overflow: hidden;
 }
 
-.hero-inner { max-width: var(--max-width); margin: 0 auto; }
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  background: var(--accent);
+  opacity: 0.12;
+  filter: blur(50px);
+  animation: blobFloat 14s ease-in-out infinite;
+}
+.blob-1 { width: 280px; height: 280px; top: -80px; left: 8%; }
+.blob-2 { width: 320px; height: 320px; top: 20px; right: 5%; animation-delay: -5s; }
+.blob-3 { width: 220px; height: 220px; bottom: -60px; left: 40%; animation-delay: -9s; }
+
+.hero-inner {
+  position: relative;
+  z-index: 1;
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
 
 .hero-inner > * {
   opacity: 0;
@@ -176,6 +226,15 @@ a:hover { color: var(--accent-dark); text-decoration: underline; }
   font-size: 1.5rem;
   font-weight: 700;
   letter-spacing: 0.02em;
+  overflow: hidden;
+  border: 3px solid var(--card-bg);
+  box-shadow: 0 0 0 2px var(--accent);
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .eyebrow {
@@ -203,6 +262,12 @@ a:hover { color: var(--accent-dark); text-decoration: underline; }
   font-size: 0.95rem;
   color: var(--text-muted);
   margin: 0 0 32px;
+  min-height: 1.4em;
+}
+
+.cursor {
+  color: var(--accent);
+  animation: blink 0.9s step-end infinite;
 }
 
 .hero-cta {
@@ -221,6 +286,7 @@ a:hover { color: var(--accent-dark); text-decoration: underline; }
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 .btn:hover { text-decoration: none; transform: translateY(-1px); }
+.btn:active { transform: translateY(0) scale(0.97); }
 
 .btn-primary {
   background: var(--accent);
@@ -249,12 +315,21 @@ a:hover { color: var(--accent-dark); text-decoration: underline; }
 .reveal {
   opacity: 0;
   transform: translateY(24px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .reveal.visible {
   opacity: 1;
   transform: translateY(0);
 }
+
+.reveal-left { transform: translate(-40px, 0); }
+.reveal-left.visible { transform: translate(0, 0); }
+
+.reveal-right { transform: translate(40px, 0); }
+.reveal-right.visible { transform: translate(0, 0); }
+
+.reveal-scale { transform: scale(0.92); }
+.reveal-scale.visible { transform: scale(1); }
 
 /* Cards */
 .card {
@@ -405,7 +480,7 @@ code {
   transform: translateY(-2px);
 }
 
-.contact-icon { font-size: 1.1rem; }
+.contact-icon { font-size: 1.1rem; font-weight: 700; }
 
 /* Footer */
 .footer {
@@ -446,10 +521,15 @@ code {
   .reveal,
   .card,
   .badge,
-  .contact-link {
+  .tag,
+  .contact-link,
+  .blob,
+  .cursor,
+  .btn {
     animation: none !important;
     transition: none !important;
     opacity: 1 !important;
     transform: none !important;
   }
+  .scroll-progress { display: none; }
 }
