@@ -214,9 +214,9 @@ a:hover { color: var(--accent-dark); text-decoration: underline; }
 .hero-inner > .hero-cta { animation-delay: 0.5s; }
 
 .avatar {
-  width: 76px;
-  height: 76px;
-  margin: 0 auto 20px;
+  width: 140px;
+  height: 140px;
+  margin: 0 auto 24px;
   border-radius: 50%;
   background: var(--accent);
   color: #fff;
